@@ -27,14 +27,40 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
+    <button @click="onClickLogin">Login</button>
+    <button @click="onClickTest">Test</button>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
+const instance = axios.create({
+  baseURL: "https://authen-backend-l66npoj4wq-as.a.run.app",
+  withCredentials: true
+})
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data () {
+    return {
+      id: ""
+    }
+  },
+  methods: {
+    onClickLogin () {
+      instance.get('/session').then(({data}) => {
+        this.id = data.id
+      })
+    },
+    onClickTest () {
+      instance.post('/session', {
+        session: this.id
+      }).then(console.log)
+    }
   }
 }
 </script>
